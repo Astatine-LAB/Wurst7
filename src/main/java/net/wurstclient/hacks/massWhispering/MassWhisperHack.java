@@ -112,6 +112,9 @@ public final class MassWhisperHack extends Hack
 		EVENTS.remove(UpdateListener.class, this);
 		EVENTS.remove(ChatInputListener.class, this);
 		EVENTS.remove(ChatOutputListener.class, this);
+		
+		players.clear();
+		message.clear();
 	}
 	
 	@Override
