@@ -41,7 +41,6 @@ public final class AutoTotemHack extends Hack implements UpdateListener
 	private int nextTickSlot;
 	private int totems;
 	private int timer;
-	private boolean wasTotemInOffhand;
 	
 	public AutoTotemHack()
 	{
