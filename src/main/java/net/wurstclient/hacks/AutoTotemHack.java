@@ -69,7 +69,6 @@ public final class AutoTotemHack extends Hack implements UpdateListener
 		nextTickSlot = -1;
 		totems = 0;
 		timer = 0;
-		wasTotemInOffhand = false;
 		EVENTS.add(UpdateListener.class, this);
 	}
 	
@@ -88,13 +87,11 @@ public final class AutoTotemHack extends Hack implements UpdateListener
 		
 		if(isTotem(MC.player.getOffHandStack()))
 		{
-			wasTotemInOffhand = true;
 			return;
 		}
 		
 		{
 			timer = delay.getValueI();
-			wasTotemInOffhand = false;
 		}
 		
 		if(nextTotemSlot == -1)
