@@ -24,54 +24,54 @@ import net.wurstclient.util.ChatUtils;
 @SearchTags({"vault", "mace", "HEAVY CORE", "copper"})
 public class VaultOpenerHack extends Hack implements RightClickListener
 {
-    private final CheckboxSetting debuggingButton = new CheckboxSetting(
-        "Debugging", "Log vault info to chat.", false);
-
-    private volatile BlockPos targetVaultPos = null;
-    private volatile boolean shouldClick = false;
-    private boolean hasDetectedMace = false;
-
-    private Thread clickThread;
-
-    public VaultOpenerHack()
-    {
-        super("VaultOpener");
-        addSetting(debuggingButton);
-        setCategory(Category.MOVEMENT);
-    }
-
-    @Override
-    protected void onEnable()
-    {
-        EVENTS.add(RightClickListener.class, this);
-
-        clickThread = new Thread(() -> {
-            while (isEnabled())
-            {
-                if (!shouldClick)
-                    continue;
-
-                if (targetVaultPos == null)
-                    continue;
-
-                clickVault();
-            }
-        });
-        clickThread.start();
-    }
-
-    @Override
-    protected void onDisable()
-    {
-        EVENTS.remove(RightClickListener.class, this);
-        if (clickThread != null && clickThread.isAlive())
-        {
-            clickThread.interrupt();
-        }
-        clickThread = null;
-    }
-
-    @Override
+	private final CheckboxSetting debuggingButton =
+		new CheckboxSetting("Debugging", "Log vault info to chat.", false);
+	
+	private volatile BlockPos targetVaultPos = null;
+	private volatile boolean shouldClick = false;
+	private boolean hasDetectedMace = false;
+	
+	private Thread clickThread;
+	
+	public VaultOpenerHack()
+	{
+		super("VaultOpener");
+		addSetting(debuggingButton);
+		setCategory(Category.MOVEMENT);
+	}
+	
+	@Override
+	protected void onEnable()
+	{
+		EVENTS.add(RightClickListener.class, this);
+		
+		clickThread = new Thread(() -> {
+			while(isEnabled())
+			{
+				if(!shouldClick)
+					continue;
+				
+				if(targetVaultPos == null)
+					continue;
+				
+				clickVault();
+			}
+		});
+		clickThread.start();
+	}
+	
+	@Override
+	protected void onDisable()
+	{
+		EVENTS.remove(RightClickListener.class, this);
+		if(clickThread != null && clickThread.isAlive())
+		{
+			clickThread.interrupt();
+		}
+		clickThread = null;
+	}
+	
+	@Override
 	public void onRightClick(RightClickEvent event)
 	{
 		if(!(MC.crosshairTarget instanceof BlockHitResult hit))
@@ -97,36 +97,40 @@ public class VaultOpenerHack extends Hack implements RightClickListener
 		
 		if("HEAVY CORE".equalsIgnoreCase(displayItemName))
 		{
-            if (hasDetectedMace) {
-                targetVaultPos = vault.getPos();
-                shouldClick = true;
-            }
-        
-            if(debuggingButton.isChecked()) {
-    			ChatUtils.message("Has Dectected Mace? > " + hasDetectedMace);
-            }
-            hasDetectedMace = true;
-		} 
-
-        event.cancel();
-        return;
-    }
-
-    private void clickVault()
-    {
-        Vec3d hitPos = Vec3d.ofCenter(targetVaultPos);
-        Direction face = Direction.getFacing(MC.player.getEyePos()).getOpposite();
-        BlockHitResult hit = new BlockHitResult(hitPos, face, targetVaultPos, false);
-        PlayerInteractBlockC2SPacket pkt =
-        new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hit, 0);
-        
-        MC.player.networkHandler.sendPacket(pkt);
-
-        if (debuggingButton.isChecked())
-            ChatUtils.message("click");
-
-        targetVaultPos = null;
-        shouldClick = false;
-        hasDetectedMace = false;
-    }
+			if(hasDetectedMace)
+			{
+				targetVaultPos = vault.getPos();
+				shouldClick = true;
+			}
+			
+			if(debuggingButton.isChecked())
+			{
+				ChatUtils.message("Has Dectected Mace? > " + hasDetectedMace);
+			}
+			hasDetectedMace = true;
+		}
+		
+		event.cancel();
+		return;
+	}
+	
+	private void clickVault()
+	{
+		Vec3d hitPos = Vec3d.ofCenter(targetVaultPos);
+		Direction face =
+			Direction.getFacing(MC.player.getEyePos()).getOpposite();
+		BlockHitResult hit =
+			new BlockHitResult(hitPos, face, targetVaultPos, false);
+		PlayerInteractBlockC2SPacket pkt =
+			new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hit, 0);
+		
+		MC.player.networkHandler.sendPacket(pkt);
+		
+		if(debuggingButton.isChecked())
+			ChatUtils.message("click");
+		
+		targetVaultPos = null;
+		shouldClick = false;
+		hasDetectedMace = false;
+	}
 }
