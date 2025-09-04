@@ -93,26 +93,33 @@ public abstract class ClientPlayNetworkHandlerMixin
 			(pos, state) -> WurstClient.INSTANCE.getHax().newChunksHack
 				.afterUpdateBlock(pos));
 	}
-
-    @Inject(at = @At("HEAD"),
-            method = "onBlockEntityUpdate(Lnet/minecraft/network/packet/s2c/play/BlockEntityUpdateS2CPacket;)V")
-    private void onBlockEntityUpdate(BlockEntityUpdateS2CPacket packet, CallbackInfo ci)
-    {
-        VaultOpenerHack vaultOpener = (VaultOpenerHack)WurstClient.INSTANCE.getHax().vaultOpenerHack;
-
-        if (!vaultOpener.isEnabled() || !(client.world.getBlockEntity(packet.getPos()) instanceof VaultBlockEntity)) {
-            return;
-        }
-
-        NbtCompound nbt = packet.getNbt();
-        if (nbt.contains("shared_data")) {
-            VaultSharedDataAccessor.getCodec()
-                    .parse(client.world.getRegistryManager().getOps(NbtOps.INSTANCE), nbt.get("shared_data"))
-                    .result()
-                    .ifPresent(sharedData -> {
-                        String itemName = sharedData.getDisplayItem().getName().getString();
-                        vaultOpener.detectedTargetItem(packet.getPos(), itemName);
-                    });
-        }
-    }
+	
+	@Inject(at = @At("HEAD"),
+		method = "onBlockEntityUpdate(Lnet/minecraft/network/packet/s2c/play/BlockEntityUpdateS2CPacket;)V")
+	private void onBlockEntityUpdate(BlockEntityUpdateS2CPacket packet,
+		CallbackInfo ci)
+	{
+		VaultOpenerHack vaultOpener =
+			(VaultOpenerHack)WurstClient.INSTANCE.getHax().vaultOpenerHack;
+		
+		if(!vaultOpener.isEnabled() || !(client.world
+			.getBlockEntity(packet.getPos()) instanceof VaultBlockEntity))
+		{
+			return;
+		}
+		
+		NbtCompound nbt = packet.getNbt();
+		if(nbt.contains("shared_data"))
+		{
+			VaultSharedDataAccessor.getCodec()
+				.parse(
+					client.world.getRegistryManager().getOps(NbtOps.INSTANCE),
+					nbt.get("shared_data"))
+				.result().ifPresent(sharedData -> {
+					String itemName =
+						sharedData.getDisplayItem().getName().getString();
+					vaultOpener.detectedTargetItem(packet.getPos(), itemName);
+				});
+		}
+	}
 }

@@ -25,8 +25,8 @@ public class VaultOpenerHack extends Hack
 	private final CheckboxSetting debuggingButton =
 		new CheckboxSetting("Debugging", "Check up Logic", false);
 	
-    private String targetItemName = "HEAVY CORE";
-
+	private String targetItemName = "HEAVY CORE";
+	
 	public VaultOpenerHack()
 	{
 		super("VaultOpener");
@@ -36,32 +36,30 @@ public class VaultOpenerHack extends Hack
 	
 	@Override
 	protected void onEnable()
-	{
-	}
-
+	{}
+	
 	@Override
 	protected void onDisable()
+	{}
+	
+	public void detectedTargetItem(BlockPos pos, String displayItemName)
 	{
+		if(debuggingButton.isChecked())
+			ChatUtils.message("displayItemName -> " + displayItemName);
+		
+		if(targetItemName.equalsIgnoreCase(displayItemName))
+			MC.execute(() -> clickEvent(pos));
 	}
-
-    public void detectedTargetItem(BlockPos pos, String displayItemName)
-    {
-        if(debuggingButton.isChecked())
-            ChatUtils.message("displayItemName -> " + displayItemName);
-
-        if (targetItemName.equalsIgnoreCase(displayItemName))
-            MC.execute(() -> clickEvent(pos));
-    }
-
-    private void clickEvent(BlockPos pos) {
-        Vec3d hitPos = Vec3d.ofCenter(pos);
-        Direction face =
-                Direction.getFacing(MC.player.getEyePos()).getOpposite();
-        BlockHitResult hit =
-                new BlockHitResult(hitPos, face, pos, false);
-        PlayerInteractBlockC2SPacket pkt =
-                new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hit, 0);
-
-        MC.player.networkHandler.sendPacket(pkt);
-    }
+	
+	private void clickEvent(BlockPos pos)
+	{
+		Vec3d hitPos = Vec3d.ofCenter(pos);
+		Direction face =
+			Direction.getFacing(MC.player.getEyePos()).getOpposite();
+		BlockHitResult hit = new BlockHitResult(hitPos, face, pos, false);
+		PlayerInteractBlockC2SPacket pkt =
+			new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, hit, 0);
+		
+		MC.player.networkHandler.sendPacket(pkt);
+	}
 }
