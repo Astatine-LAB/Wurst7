@@ -30,12 +30,12 @@ public final class WurstUpdater implements UpdateListener
 	@Override
 	public void onUpdate()
 	{
-		if(thread == null)
-		{
-			thread = new Thread(this::checkForUpdates, "WurstUpdater");
-			thread.start();
-			return;
-		}
+		// if(thread == null)
+		// {
+		// 	thread = new Thread(this::checkForUpdates, "WurstUpdater");
+		// 	thread.start();
+		// 	return;
+		// }
 		
 		if(thread.isAlive())
 			return;
