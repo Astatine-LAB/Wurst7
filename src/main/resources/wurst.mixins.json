@@ -68,7 +68,6 @@
     "TelemetryManagerMixin",
     "TextVisitFactoryMixin",
     "TitleScreenMixin",
-    "VaultSharedDataAccessor",
     "WorldMixin",
     "WorldRendererMixin"
   ],

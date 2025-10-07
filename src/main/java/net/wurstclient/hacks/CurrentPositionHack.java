@@ -41,7 +41,7 @@ public final class CurrentPositionHack extends Hack
 		if(blockX != lastBlockX || blockZ != lastBlockZ)
 		{
 			String keyPath =
-				player.getWorld().getRegistryKey().getValue().getPath();
+				player.getEntityWorld().getRegistryKey().getValue().getPath();
 			
 			int targetX, targetZ;
 			if("overworld".equals(keyPath))

@@ -105,28 +105,29 @@ public final class LogoutSpotHack extends Hack
 	public void onUpdate()
 	{
 		// MinecraftClient.getInstance().getNetworkHandler().getPlayerList().stream()
-		// 	.forEach(
-		// 		entry -> {
-		// 			UUID uuid = entry.getProfile().getId();
-		// 			String name = entry.getProfile().getName();
-		// 			System.out.println(String.format("online p -> %s, %s", name, uuid));
-		// 		}
-		// 	);
+		// .forEach(
+		// entry -> {
+		// UUID uuid = entry.getProfile().getId();
+		// String name = entry.getProfile().getName();
+		// System.out.println(String.format("online p -> %s, %s", name, uuid));
+		// }
+		// );
 		
 		// MC.world.getPlayers().parallelStream()
-		// 	.forEach(
-		// 		entry -> {
-		// 			UUID uuid = entry.getUuid();
-		// 			String name = entry.getName().getString();
-		// 			System.out.println(String.format("renderer p -> %s, %s", name, uuid));
-		// 		}
-		// 	);
-
+		// .forEach(
+		// entry -> {
+		// UUID uuid = entry.getUuid();
+		// String name = entry.getName().getString();
+		// System.out.println(String.format("renderer p -> %s, %s", name,
+		// uuid));
+		// }
+		// );
+		
 		// 온라인 플레이어 목록 (네트워크 탭 리스트)
 		onlinePlayers = MinecraftClient.getInstance().getNetworkHandler()
 			.getPlayerList().stream()
-			.collect(Collectors.toMap(entry -> entry.getProfile().getId(),
-				entry -> entry.getProfile().getName()));
+			.collect(Collectors.toMap(entry -> entry.getProfile().id(),
+				entry -> entry.getProfile().name()));
 		
 		// 온라인 플레이어에 재접속한 경우, logOutPlayers에서 제거
 		logOutPlayers.entrySet()
@@ -138,7 +139,8 @@ public final class LogoutSpotHack extends Hack
 			// 현재 월드에서 렌더링되고 있는 플레이어 목록 (FakePlayer 제외)
 			renderPlayers = MC.world.getPlayers().parallelStream()
 				.filter(e -> !(e instanceof FakePlayerEntity))
-				.collect(Collectors.toMap(Entity::getUuid, Entity::getPos));
+				.collect(Collectors.toMap(Entity::getUuid,
+					Entity::getRotationVector));
 			return;
 		}
 		
